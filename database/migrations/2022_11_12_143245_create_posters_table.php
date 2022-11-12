@@ -21,7 +21,7 @@ class CreatePostersTable extends Migration
             $table->increments('id');
             $table->string('logo_src', 255)->nullable();
             $table->string('mix_src', 255)->nullable();
-            $table->string('name', 255);
+            $table->string('name', 255)->nullable();
             $table->integer('sort')->default(0);
             $table->json('path')->nullable();;
             $table->dateTime('disabled_at')->nullable();;

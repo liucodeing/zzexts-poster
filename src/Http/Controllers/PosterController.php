@@ -117,11 +117,13 @@ SCRIPT;
 
         $image_url = null;
         if ($request->file('logo_src')) {
-            list($file_result, $file_msg) = file_size_limit_check($request->file('logo_src'));
-            if (!$file_result) {
-                admin_error('编辑失败', $file_msg);
+            (int)$upload_file_max_size = config('zzexts-poster.upload_file_max_size');
+            $logo_file = $request->file('logo_src');
+            if ($logo_file->getClientSize() >= $upload_file_max_size) {
+                admin_error('保存失败', '上传文件不能超过' . ($upload_file_max_size / 1024 / 1024) . 'M');
                 return redirect()->back();
             }
+            
             $image_src = Storage::disk(config('zzexts-poster.filesystem_driver'))->put('share', $request->file('logo_src'));
             $image_url = Storage::disk(config('zzexts-poster.filesystem_driver'))->url($image_src);
             if (!$image_url) {

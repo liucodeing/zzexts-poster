@@ -44,7 +44,12 @@ class InstallCommand extends Command
      */
     public function initDatabase()
     {
-        $this->call('migrate', ['--path' => __DIR__ . '/../../database/migrations/2022_11_12_143245_create_posters_table.php']);
+//        dd(database_path('migrations') . '/2022_11_12_143245_create_posters_table.php');
+//        $this->call('migrate', ['--path' => database_path('migrations') . '/2022_11_12_143245_create_posters_table.php']);
+//        dd(['--path' => database_path('migrations') . '/2022_11_12_143245_create_posters_table.php']);
+
+//        $this->call('migrate', ['--path' => __DIR__ . '/../../database/migrations']);
+        $this->call('migrate');
     }
 
 }

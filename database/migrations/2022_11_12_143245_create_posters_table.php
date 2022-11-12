@@ -13,17 +13,22 @@ class CreatePostersTable extends Migration
      */
     public function up()
     {
-        Schema::create(config('zzexts-poster.database.poster_table'), function (Blueprint $table) {
+        $connection = config('zzexts-poster.database.connection') ?: config('database.default');
+
+        $table = config('zzexts-poster.database.poster_table', 'posters');
+
+        Schema::connection($connection)->create($table, function (Blueprint $table) {
             $table->increments('id');
-            $table->string('logo_src', 255);
-            $table->string('mix_src', 255);
+            $table->string('logo_src', 255)->nullable();
+            $table->string('mix_src', 255)->nullable();
             $table->string('name', 255);
-            $table->integer('sort', 11);
-            $table->json('path');
-            $table->dateTime('disabled_at');
+            $table->integer('sort')->default(0);
+            $table->json('path')->nullable();;
+            $table->dateTime('disabled_at')->nullable();;
             $table->dateTime('created_at');
-            $table->dateTime('updated_at');
+            $table->dateTime('updated_at')->nullable();;
         });
+
     }
 
     /**
@@ -33,6 +38,12 @@ class CreatePostersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('posters');
+        $connection = config('zzexts-poster.database.connection') ?: config('database.default');
+
+        $table = config('zzexts-poster.database.poster_table', 'posters');
+
+        Schema::connection($connection)->dropIfExists($table);
     }
+
 }
+

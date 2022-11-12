@@ -27,7 +27,10 @@ class PosterServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole() && $assets = $extension->assets()) {
             $this->publishes([$assets => public_path('vendor/zzexts/poster')], 'poster');
+//            $this->publishes([__DIR__ . '/../database/migrations' => database_path('migrations')], 'zzexts-poster-migrations');
             $this->publishes([__DIR__ . '/../config' => config_path()], 'zzexts-poster-config');
+
+            $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         }
 
         $this->app->booted(function () {

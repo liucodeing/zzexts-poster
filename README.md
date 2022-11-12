@@ -11,7 +11,7 @@ $ composer require zzexts/poster
 ```
 
 #### 发布静态文件到public目录
-
+同时生成配置文件`config/zzexts-poster.php`
 ```shell
 $ php artisan vendor:publish --provider=Zzexts\\Poster\\PosterServiceProvider
 ```

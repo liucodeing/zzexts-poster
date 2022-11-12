@@ -1,14 +1,14 @@
 {
     "name": "zzexts/poster",
-    "description": "description...",
+    "description": "一个可修改海报图",
     "type": "library",
     "keywords": ["laravel-admin", "extension"],
-    "homepage": "https://github.com/zzexts/poster",
+    "homepage": "https://github.com/liucodeing/zzexts-poster",
     "license": "MIT",
     "authors": [
         {
-            "name": "your name",
-            "email": "your email"
+            "name": "liucodeing",
+            "email": "liucodeing@gmail.com"
         }
     ],
     "require": {

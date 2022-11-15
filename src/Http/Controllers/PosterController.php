@@ -28,7 +28,8 @@ class PosterController extends Controller
         $grid = new Grid(new Poster());
         $grid->model()->orderBy('id', 'desc');
         $grid->column('id', __('ID'));
-        $grid->logo_src('主图')->lightbox(['width' => 50, 'height' => 50]);
+        $grid->logo_src('主图')->image('', 120, 120);
+//        $grid->logo_src('主图')->lightbox(['width' => 50, 'height' => 50]);
         $grid->column('sort', __('优先'))->editable();
         $states = [
             'on' => ['value' => null, 'text' => '启用', 'color' => 'success'],
@@ -36,42 +37,46 @@ class PosterController extends Controller
         ];
         $grid->disabled_at('状态')->switch($states);
 //        $grid->column('created_at', __('创建时间'));
-        $grid->disableExport();
-        $grid->actions(function ($actions) {
-            $actions->disableView();
-            $actions->disableDelete();
-            $actions->disableEdit();
-            $actions->append('<div class="btn-group  " style="margin:  0px 10px"><a href="' . route('poster.edit', ['id' => $actions->row->id]) . '" class="btn btn-sm btn-default" title="主图更换"><span class="hidden-xs"> 主图更换</span></a></div>');
-            $actions->append('<div class="btn-group  " style="margin:  0px 10px"><a href="' . route('poster.design', ['id' => $actions->row->id]) . '" class="btn btn-sm btn-default" title="效果设计"><span class="hidden-xs"> 效果设计</span></a></div>');
+        $grid->column('opt', '操作')->display(function(){
+            return '<div class="btn-group  " style="margin:  0px 10px"><a href="' . route('poster.edit', ['id' => $this->id]) . '" class="btn btn-sm btn-default" title="主图更换"><span class="hidden-xs"> 主图更换</span></a></div><div class="btn-group  " style="margin:  0px 10px"><a href="' . route('poster.design', ['id' => $this->id]) . '" class="btn btn-sm btn-default" title="效果设计"><span class="hidden-xs"> 效果设计</span></a></div>';
         });
+        $grid->disableExport();
+//        $grid->actions(function ($actions) {
+//            $actions->disableView();
+//            $actions->disableDelete();
+//            $actions->disableEdit();
+////            $actions->append('<div class="btn-group  " style="margin:  0px 10px"><a href="' . route('poster.edit', ['id' => $actions->row->id]) . '" class="btn btn-sm btn-default" title="主图更换"><span class="hidden-xs"> 主图更换</span></a></div>');
+////            $actions->append('<div class="btn-group  " style="margin:  0px 10px"><a href="' . route('poster.design', ['id' => $actions->row->id]) . '" class="btn btn-sm btn-default" title="效果设计"><span class="hidden-xs"> 效果设计</span></a></div>');
+//        });
+        $grid->disableActions();
         $grid->disableFilter();
 
         $grid->disableRowSelector();
         //大图动态加载
-        $script = <<<SCRIPT
-$('.grid-popup-link').magnificPopup({
-"type":"image",
-"gallery":{
-    "enabled":true,
-    "preload":[0,2],
-    "navigateByImgClick":true,
-    "arrowMarkup":"<button title=\"%title%\" type=\"button\" class=\"mfp-arrow mfp-arrow-%dir%\"><\/button>",
-    "tPrev":"Previous (Left arrow key)",
-    "tNext":"Next (Right arrow key)",
-    "tCounter":"<span class=\"mfp-counter\">%curr% of %total%<\/span>"
-    },
-"mainClass":"mfp-with-zoom",
-"zoom":{"enabled":true,"duration":300,"easing":"ease-in-out"}
-});
-$('.show_img_box').click(function(){
-    var objImg=$(this).next().find('img')
-    objImg.attr('src', objImg.data('src'))
-    $(this).next().show()
-    $(this).hide()
-    objImg.parent().click()
-});
-SCRIPT;
-        Admin::script($script);
+//        $script = <<<SCRIPT
+//$('.grid-popup-link').magnificPopup({
+//"type":"image",
+//"gallery":{
+//    "enabled":true,
+//    "preload":[0,2],
+//    "navigateByImgClick":true,
+//    "arrowMarkup":"<button title=\"%title%\" type=\"button\" class=\"mfp-arrow mfp-arrow-%dir%\"><\/button>",
+//    "tPrev":"Previous (Left arrow key)",
+//    "tNext":"Next (Right arrow key)",
+//    "tCounter":"<span class=\"mfp-counter\">%curr% of %total%<\/span>"
+//    },
+//"mainClass":"mfp-with-zoom",
+//"zoom":{"enabled":true,"duration":300,"easing":"ease-in-out"}
+//});
+//$('.show_img_box').click(function(){
+//    var objImg=$(this).next().find('img')
+//    objImg.attr('src', objImg.data('src'))
+//    $(this).next().show()
+//    $(this).hide()
+//    objImg.parent().click()
+//});
+//SCRIPT;
+//        Admin::script($script);
         return $grid;
     }
 
@@ -123,7 +128,7 @@ SCRIPT;
                 admin_error('保存失败', '上传文件不能超过' . ($upload_file_max_size / 1024 / 1024) . 'M');
                 return redirect()->back();
             }
-            
+
             $image_src = Storage::disk(config('zzexts-poster.filesystem_driver'))->put('share', $request->file('logo_src'));
             $image_url = Storage::disk(config('zzexts-poster.filesystem_driver'))->url($image_src);
             if (!$image_url) {
@@ -173,6 +178,7 @@ SCRIPT;
             return $this->returnJson(1, '找不到要设计的效果！', []);
         }
 
+        $data['template_id'] = $poster->id.'';
         $data['bg'] = $poster->logo_src;
         $data['arr'] = [];
         $path = json_decode($poster->path, true);
@@ -205,7 +211,8 @@ SCRIPT;
             $data['configure']['cy-code']["width"] = $width;
             $data['configure']['cy-code']["height"] = $height;
         }
-        return $this->returnJson(0, '', ['data' => $data]);
+
+        return $this->returnJson(0, '', ['data'=>$data]);
     }
 
     /**

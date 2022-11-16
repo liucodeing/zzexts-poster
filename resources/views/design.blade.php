@@ -19,6 +19,7 @@
     // 数据
     window.template_id = {{$id??0}};
     window.request_url = '{{$request_url??''}}';
+    window._token='{{ csrf_token() }}'
     window.posterData = function () {
         let Da = {};
 

@@ -19,4 +19,11 @@ class Poster extends Model
         $this->setTable(config('zzexts-poster.database.poster_table', 'posters'));
     }
 
+
+    public function getPathInfoAttribute()
+    {
+        $path_info = json_decode($this->path);
+        $path_info->bg = $this->logo_src;
+        return $path_info;
+    }
 }

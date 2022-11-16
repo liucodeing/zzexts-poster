@@ -26,11 +26,22 @@ class PosterRepository
 
     static function get()
     {
+        $poster = Model::query()->whereNull('disabled_at')->orderBy('sort', 'asc')->first();
+        if ($poster) {
+            return $poster->path_info;
+        } else {
+            return null;
+        }
 
     }
 
-    static function first()
+    static function all()
     {
-
+        $posters = Model::query()->whereNull('disabled_at')->orderBy('sort')->get();
+        $data = [];
+        foreach ($posters as $poster) {
+            $data[] = $poster->path_info;
+        }
+        return $data;
     }
 }

@@ -11,14 +11,14 @@ $ composer require zzexts/poster
 ```
 
 #### 发布静态文件到public目录
-
+后台提供编辑海报的前端源码进行发布，
 同时生成配置文件`config/zzexts-poster.php`
 
 ```shell
 $ php artisan vendor:publish --provider=Zzexts\\Poster\\PosterServiceProvider
 ```
 
-可修改配置文件 `config/zzexts-poster.php`
+可修改配置文件 `config/zzexts-poster.php`。需要配置二维码展位图地址。图片位置默认使用的是本次存储，可按照自己的需要修改。
 
 ```phpt
     'database' => [
@@ -31,7 +31,7 @@ $ php artisan vendor:publish --provider=Zzexts\\Poster\\PosterServiceProvider
 ```
 
 #### 迁入数据库
-
+数据库增加表 `posters`
 ```shell
 $ php artisan admin:poster-install
 ```
@@ -43,19 +43,19 @@ $ php artisan admin:poster-install
 文件存储配置 `config/filesystems.php`。 可以使用public配置。使用七牛，oss需按照laravel文件存储配置。
 
 ```phpt
-    ....
-    'public' => [
-        'driver' => 'local',
-        'root' => storage_path('app/public'),
-        'url' => env('APP_URL').'/storage',
-        'visibility' => 'public',
-    ],
-    ....
+....
+'public' => [
+    'driver' => 'local',
+    'root' => storage_path('app/public'),
+    'url' => env('APP_URL').'/storage',
+    'visibility' => 'public',
+],
+....
 ```
 
 浏览器访问 `http://your-host/admin/poster`
 
-## 有需要
+## 有需要可以导入菜单，或者手动增加
 
 #### 导入laravel-admin菜单
 

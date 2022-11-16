@@ -12,3 +12,6 @@ Route::get('poster/design/{id}', PosterController::class . '@design')->name('pos
 Route::get('poster/design/data/{id}', PosterController::class . '@design_get')->name('poster.design_get');
 Route::put('poster/design/data/{id}', PosterController::class . '@design_store')->name('poster.design_store');
 
+
+Route::get('poster/test/get', PosterController::class . '@get');
+Route::get('poster/test/all', PosterController::class . '@all');

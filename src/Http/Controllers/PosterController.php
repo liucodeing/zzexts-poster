@@ -13,6 +13,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Zzexts\Poster\Models\Poster;
+use Zzexts\Poster\Repositories\PosterRepository;
 
 class PosterController extends Controller
 {
@@ -247,4 +248,7 @@ class PosterController extends Controller
         return compact('err', 'msg', 'data');
         //['err'=>1,'msg'=>'提示信息','data'=>['id'=>1]]
     }
+
+
+
 }
